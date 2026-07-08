@@ -91,3 +91,13 @@ input, textarea {
   margin-top: 8px;
   font-size: 13px;
 }
+
+.dice-roller {
+  background: #1a0033;
+  border: 2px solid #00ccff;
+}
+
+#rollResult {
+  color: #00ffaa;
+  text-shadow: 0 0 8px #00ffaa;
+}
