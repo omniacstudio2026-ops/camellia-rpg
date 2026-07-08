@@ -192,3 +192,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+// Rolagem de Dados
+const rollBtn = qs('rollBtn');
+const rollMod = qs('rollMod');
+const rollResult = qs('rollResult');
+const rollDetail = qs('rollDetail');
+
+rollBtn.onclick = () => {
+  const mod = parseInt(rollMod.value) || 0;
+  
+  const d1 = Math.floor(Math.random() * 10) + 1;
+  const d2 = Math.floor(Math.random() * 10) + 1;
+  const total = d1 + d2 + mod;
+
+  rollResult.textContent = `${total}`;
+  rollDetail.textContent = `2d10 (${d1} + ${d2}) + ${mod}`;
+
+  // Efeito visual
+  rollResult.style.animation = 'none';
+  setTimeout(() => rollResult.style.animation = 'pulse 0.4s', 10);
+};
