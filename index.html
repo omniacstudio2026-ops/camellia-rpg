@@ -62,7 +62,15 @@
         <h3>Atributos</h3>
         <div class="attrs" id="attributes"></div>
       </div>
-
+	<div class="box dice-roller">
+  <h3>Rolagem Rápida (2d10)</h3>
+  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+    <input id="rollMod" type="number" value="0" style="width: 80px;" placeholder="Mod" />
+    <button id="rollBtn">Rolar 2d10 + Mod</button>
+    <div id="rollResult" style="font-size: 1.4em; font-weight: bold; min-width: 120px;"></div>
+  </div>
+  <small id="rollDetail"></small>
+</div>
       <!-- Maestria -->
       <div class="box">
         <h3>Maestria (PMs)</h3>
