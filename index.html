@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Camellia RPG - Fichas</title>
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    .glitch-text { font-family: 'Creepster', system-ui; color: #00ccff; text-shadow: 0 0 10px #00ccff; }
-  </style>
 </head>
 <body>
   <header>
@@ -27,24 +24,27 @@
     </aside>
 
     <section class="sheet" id="sheet">
-      <!-- Topo -->
-      <div class="top-row">
-        <div class="info">
-	<div class="portrait-container">
-  	  <img id="portraitImg" src="" alt="Portrait do Personagem" 
-         onerror="this.src='https://via.placeholder.com/220x280/111/00ccff?text=Sem+Portrait'" />
-    <input type="text" id="portraitUrl" placeholder="Cole a URL da imagem aqui" />
-    <button id="loadPortraitBtn">Carregar Portrait</button>
-  </div>
-          <input id="name" placeholder="Nome do Feiticeiro" />
-          <div class="meta">
-            <input id="age" placeholder="Idade" />
-            <input id="species" placeholder="Espécie (Humano/Mestiço...)" />
-            <input id="grade" placeholder="Grau (4 a Especial)" />
-          </div>
-          <textarea id="bio" placeholder="Conceito / História"></textarea>
+      <div class="info">
+        <div class="portrait-container">
+          <img id="portraitImg" src="" alt="Portrait" onerror="this.src='https://via.placeholder.com/220x280/111/00ccff?text=Portrait'" />
+          <input type="text" id="portraitUrl" placeholder="URL da imagem" />
+          <button id="loadPortraitBtn">Carregar Portrait</button>
         </div>
 
+        <input id="name" placeholder="Nome do Feiticeiro" style="font-size: 1.5em; text-align: center;" />
+
+        <div class="meta">
+          <input id="age" placeholder="Idade" />
+          <input id="species" placeholder="Espécie" />
+          <input id="grade" placeholder="Grau" />
+        </div>
+
+        <textarea id="bio" placeholder="Conceito / História"></textarea>
+      </div>
+
+      <!-- Status -->
+      <div class="box">
+        <h3>Status</h3>
         <div class="bars">
           <label>PV <span id="pvVal"></span></label>
           <input id="pvMax" type="number" /> <input id="pvNow" type="number" />
@@ -62,41 +62,32 @@
         <h3>Atributos</h3>
         <div class="attrs" id="attributes"></div>
       </div>
-	<div class="box dice-roller">
-  <h3>Rolagem Rápida (2d10)</h3>
-  <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-    <input id="rollMod" type="number" value="0" style="width: 80px;" placeholder="Mod" />
-    <button id="rollBtn">Rolar 2d10 + Mod</button>
-    <div id="rollResult" style="font-size: 1.4em; font-weight: bold; min-width: 120px;"></div>
-  </div>
-  <small id="rollDetail"></small>
-</div>
-      <!-- Maestria -->
+
+      <!-- Rolagem -->
+      <div class="box dice-roller">
+        <h3>Rolagem Rápida (2d10)</h3>
+        <div class="roll-area">
+          <input id="rollMod" type="number" value="0" placeholder="Modificador" />
+          <button id="rollBtn">Rolar 2d10 + Mod</button>
+        </div>
+        <div id="rollResult" class="roll-result"></div>
+        <small id="rollDetail"></small>
+      </div>
+
+      <!-- Histórico de Rolagens -->
       <div class="box">
-        <h3>Maestria (PMs)</h3>
-        <div id="mastery"></div>
+        <h3>Histórico de Rolagens</h3>
+        <div id="rollHistory" class="history"></div>
       </div>
 
       <!-- Técnica Inata -->
       <div class="box">
         <h3>Técnica Inata</h3>
-        <textarea id="innateTech" placeholder="Conceito base + extensões..."></textarea>
-      </div>
-
-      <!-- Outros campos -->
-      <div class="bottom-row">
-        <div class="box">
-          <h3>Repertório</h3>
-          <textarea id="repertoire" placeholder="Frases do repertório..."></textarea>
-        </div>
-        <div class="box">
-          <h3>Equipamentos / Ferramentas</h3>
-          <textarea id="equipment" placeholder="Armas, objetos amaldiçoados..."></textarea>
-        </div>
+        <textarea id="innateTech" placeholder="Descreva sua técnica..."></textarea>
       </div>
 
       <div class="sheet-actions">
-        <button id="saveBtn">Salvar</button>
+        <button id="saveBtn">Salvar Ficha</button>
         <button id="duplicateBtn">Duplicar</button>
         <button id="deleteBtn">Excluir</button>
         <button id="exportBtn">Exportar JSON</button>
@@ -105,7 +96,7 @@
   </main>
 
   <footer>
-    <small>Camellia RPG 2ª Edição • Fichas Digitais (localStorage + JSON)</small>
+    <small>Camellia RPG 2ª Edição • Fichas Digitais</small>
   </footer>
 
   <script src="app.js"></script>
