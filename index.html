@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Camellia RPG - Fichas</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -26,7 +26,8 @@
     <section class="sheet" id="sheet">
       <div class="info">
         <div class="portrait-container">
-          <img id="portraitImg" src="" alt="Portrait" onerror="this.src='https://via.placeholder.com/220x280/111/00ccff?text=Portrait'" />
+          <img id="portraitImg" src="" alt="Portrait" 
+               onerror="this.src='https://via.placeholder.com/220x280/111/00ccff?text=Portrait'" />
           <input type="text" id="portraitUrl" placeholder="URL da imagem" />
           <button id="loadPortraitBtn">Carregar Portrait</button>
         </div>
@@ -47,13 +48,16 @@
         <h3>Status</h3>
         <div class="bars">
           <label>PV <span id="pvVal"></span></label>
-          <input id="pvMax" type="number" /> <input id="pvNow" type="number" />
+          <input id="pvMax" type="number" /> 
+          <input id="pvNow" type="number" />
 
           <label>PEA <span id="peaVal"></span></label>
-          <input id="peaMax" type="number" /> <input id="peaNow" type="number" />
+          <input id="peaMax" type="number" /> 
+          <input id="peaNow" type="number" />
 
           <label>PE <span id="peVal"></span></label>
-          <input id="peMax" type="number" /> <input id="peNow" type="number" />
+          <input id="peMax" type="number" /> 
+          <input id="peNow" type="number" />
         </div>
       </div>
 
@@ -74,7 +78,7 @@
         <small id="rollDetail"></small>
       </div>
 
-      <!-- Histórico de Rolagens -->
+      <!-- Histórico -->
       <div class="box">
         <h3>Histórico de Rolagens</h3>
         <div id="rollHistory" class="history"></div>
