@@ -1,4 +1,4 @@
-# Ordo CRIS — Fichas (site estático)
+# Camellia rpgzando — Fichas (site estático)
 
 Site simples de fichas inspirado no C.R.I.S — pensado para funcionar no celular e ser hospedado via GitHub Pages.
 
