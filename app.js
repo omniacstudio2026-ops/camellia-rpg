@@ -2,14 +2,12 @@ const DEFAULT_ATTRIBUTES = ["Jujutsu", "Físico", "Agilidade", "Intelecto", "Car
 
 let chars = [];
 let currentId = null;
-let rollHistory = [];
 
 function qs(id) { return document.getElementById(id); }
 
 function makeDefaultChar(name = 'Novo Feiticeiro') {
   const attributes = {};
   DEFAULT_ATTRIBUTES.forEach(a => attributes[a] = 1);
-
   return {
     id: Date.now().toString(36),
     name, age: '', species: 'Humano', grade: '4', bio: '',
@@ -17,8 +15,6 @@ function makeDefaultChar(name = 'Novo Feiticeiro') {
     attributes,
     hasEAR: false,
     innateTech: '',
-    repertoire: '',
-    equipment: '',
     pvMax: 20, pvNow: 20,
     peaMax: 20, peaNow: 20,
     peMax: 8, peNow: 8
@@ -26,55 +22,46 @@ function makeDefaultChar(name = 'Novo Feiticeiro') {
 }
 
 function loadStorage() {
-  const raw = localStorage.getItem('camellia_chars_v4');
+  const raw = localStorage.getItem('camellia_chars');
   chars = raw ? JSON.parse(raw) : [makeDefaultChar('Gojo Satoru')];
   saveStorage();
 }
 
 function saveStorage() {
-  localStorage.setItem('camellia_chars_v4', JSON.stringify(chars));
+  localStorage.setItem('camellia_chars', JSON.stringify(chars));
   renderList();
 }
 
-// Cálculo por Espécie (conforme o livro)
-function calculateMaxStats(species, attributes) {
+function calculateMaxStats(attributes) {
   const f = attributes.Físico || 1;
   const j = attributes.Jujutsu || 1;
   const a = attributes.Agilidade || 1;
   const i = attributes.Intelecto || 1;
 
-  let pvBase = 12, peaBase = 16, peBase = 5;
-
-  if (species === "Mestiço" || species === "Híbrido") {
-    pvBase = 12; peaBase = 20; peBase = 5;
-  } else if (species === "Shimuriano") {
-    pvBase = 10; peaBase = 20; peBase = 5;
-  } else if (species === "Corpo Amaldiçoado") {
-    pvBase = 0; peaBase = 16; peBase = 5;
-  }
-
   return {
-    pvMax: pvBase + (f * 8),
-    peaMax: peaBase + (j * 6),
-    peMax: peBase + (i * 2) + (a * 1)
+    pvMax: 12 + (f * 8),
+    peaMax: 16 + (j * 6),
+    peMax: 5 + (i * 2) + (a * 1)
   };
 }
 
 function renderAttributes(c) {
   const container = qs('attributes');
+  if (!container) return console.error("Div de atributos não encontrada!");
+
   container.innerHTML = '';
 
   Object.keys(c.attributes).forEach(key => {
     const div = document.createElement('div');
-    div.style.marginBottom = "8px";
+    div.style = "margin: 8px 0; display: flex; align-items: center;";
     div.innerHTML = `
-      <label style="display:inline-block;width:120px">${key}:</label>
-      <input type="number" value="${c.attributes[key]}" min="1" max="5" data-key="${key}" style="width:60px">
+      <label style="width: 130px;">${key}:</label>
+      <input type="number" value="${c.attributes[key]}" min="1" max="5" style="width: 70px; padding: 6px;">
     `;
     const input = div.querySelector('input');
-    input.oninput = () => {
+    input.onchange = () => {
       c.attributes[key] = parseInt(input.value) || 1;
-      const stats = calculateMaxStats(c.species, c.attributes);
+      const stats = calculateMaxStats(c.attributes);
       c.pvMax = stats.pvMax;
       c.peaMax = stats.peaMax;
       c.peMax = stats.peMax;
@@ -98,56 +85,32 @@ function openChar(id) {
   qs('species').value = c.species;
   qs('grade').value = c.grade;
   qs('bio').value = c.bio;
-  qs('portraitImg').src = c.portrait || '';
-  qs('portraitUrl').value = c.portrait || '';
-  qs('innateTech').value = c.innateTech || '';
 
   qs('pvMax').value = c.pvMax;
-  qs('pvNow').value = c.pvNow || c.pvMax;
+  qs('pvNow').value = c.pvNow;
   qs('peaMax').value = c.peaMax;
-  qs('peaNow').value = c.peaNow || c.peaMax;
+  qs('peaNow').value = c.peaNow;
   qs('peMax').value = c.peMax;
-  qs('peNow').value = c.peNow || c.peMax;
-
-  qs('earCheckbox').checked = !!c.hasEAR;
+  qs('peNow').value = c.peNow;
 
   renderAttributes(c);
   renderList(qs('search').value);
 }
 
-function writeBack() {
-  if (!currentId) return;
-  const c = chars.find(x => x.id === currentId);
-  if (!c) return;
-
-  c.name = qs('name').value;
-  c.age = qs('age').value;
-  c.species = qs('species').value;
-  c.grade = qs('grade').value;
-  c.bio = qs('bio').value;
-  c.portrait = qs('portraitUrl').value.trim();
-  c.innateTech = qs('innateTech').value;
-  c.hasEAR = qs('earCheckbox').checked;
-
-  c.pvNow = parseInt(qs('pvNow').value) || 0;
-  c.peaNow = parseInt(qs('peaNow').value) || 0;
-  c.peNow = parseInt(qs('peNow').value) || 0;
-
-  saveStorage();
+function renderList(filter = '') {
+  const list = qs('charList');
+  list.innerHTML = '';
+  chars.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()))
+       .forEach(c => {
+         const el = document.createElement('div');
+         el.textContent = c.name;
+         el.onclick = () => openChar(c.id);
+         list.appendChild(el);
+       });
 }
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
   loadStorage();
   if (chars.length) openChar(chars[0].id);
-
-  qs('saveBtn').onclick = writeBack;
-  qs('loadPortraitBtn').onclick = () => {
-    if (currentId) {
-      const c = chars.find(x => x.id === currentId);
-      c.portrait = qs('portraitUrl').value.trim();
-      qs('portraitImg').src = c.portrait;
-      saveStorage();
-    }
-  };
 });
