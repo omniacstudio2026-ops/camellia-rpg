@@ -5,11 +5,9 @@ let currentId = null;
 
 function qs(id) { return document.getElementById(id); }
 
-// ==================== CRIAÇÃO DE FICHA ====================
 function makeDefaultChar(name = 'Novo Feiticeiro') {
   const attributes = {};
   DEFAULT_ATTRIBUTES.forEach(a => attributes[a] = 1);
-
   return {
     id: Date.now().toString(36),
     name,
@@ -21,28 +19,23 @@ function makeDefaultChar(name = 'Novo Feiticeiro') {
     attributes,
     hasEAR: false,
     innateTech: '',
-    pvMax: 20,
-    pvNow: 20,
-    peaMax: 20,
-    peaNow: 20,
-    peMax: 8,
-    peNow: 8
+    pvMax: 20, pvNow: 20,
+    peaMax: 20, peaNow: 20,
+    peMax: 8, peNow: 8
   };
 }
 
-// ==================== STORAGE ====================
 function loadStorage() {
-  const raw = localStorage.getItem('camellia_chars_v5');
+  const raw = localStorage.getItem('camellia_chars');
   chars = raw ? JSON.parse(raw) : [makeDefaultChar('Gojo Satoru')];
   saveStorage();
 }
 
 function saveStorage() {
-  localStorage.setItem('camellia_chars_v5', JSON.stringify(chars));
+  localStorage.setItem('camellia_chars', JSON.stringify(chars));
   renderList();
 }
 
-// ==================== CÁLCULO AUTOMÁTICO ====================
 function calculateMaxStats(attributes) {
   const f = attributes.Físico || 1;
   const j = attributes.Jujutsu || 1;
@@ -56,21 +49,19 @@ function calculateMaxStats(attributes) {
   };
 }
 
-// ==================== RENDER ATRIBUTOS ====================
 function renderAttributes(c) {
   const container = qs('attributes');
-  if (!container) return;
+  if (!container) return console.error("Div #attributes não encontrada!");
 
   container.innerHTML = '';
 
   Object.keys(c.attributes).forEach(key => {
     const div = document.createElement('div');
-    div.style = "display: flex; align-items: center; gap: 10px; margin: 6px 0;";
+    div.style = "display:flex; align-items:center; gap:12px; margin:8px 0;";
     div.innerHTML = `
-      <label style="width: 130px;">${key}:</label>
-      <input type="number" value="${c.attributes[key]}" min="1" max="5" style="width: 70px;">
+      <label style="width:130px">${key}:</label>
+      <input type="number" value="${c.attributes[key]}" min="1" max="5" style="width:70px">
     `;
-
     const input = div.querySelector('input');
     input.onchange = () => {
       c.attributes[key] = parseInt(input.value) || 1;
@@ -88,7 +79,6 @@ function renderAttributes(c) {
   });
 }
 
-// ==================== OPEN CHAR ====================
 function openChar(id) {
   const c = chars.find(x => x.id === id);
   if (!c) return;
@@ -116,7 +106,6 @@ function openChar(id) {
   renderList(qs('search').value);
 }
 
-// ==================== LISTA ====================
 function renderList(filter = '') {
   const list = qs('charList');
   list.innerHTML = '';
@@ -129,7 +118,6 @@ function renderList(filter = '') {
        });
 }
 
-// ==================== SALVAR ====================
 function writeBack() {
   if (!currentId) return;
   const c = chars.find(x => x.id === currentId);
@@ -151,14 +139,13 @@ function writeBack() {
   saveStorage();
 }
 
-// ==================== INICIALIZAÇÃO ====================
+// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
   loadStorage();
-
   if (chars.length) openChar(chars[0].id);
 
   qs('newBtn').onclick = () => {
-    const c = makeDefaultChar('Novo Feiticeiro ' + (chars.length + 1));
+    const c = makeDefaultChar();
     chars.push(c);
     saveStorage();
     openChar(c.id);
@@ -173,9 +160,4 @@ document.addEventListener('DOMContentLoaded', () => {
       saveStorage();
     }
   };
-
-  // Auto salvar
-  document.querySelectorAll('input, textarea').forEach(el => {
-    if (el.id !== 'search') el.addEventListener('change', writeBack);
-  });
 });
